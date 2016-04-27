@@ -1,4 +1,4 @@
-'use strict'
+const N = parseInt(process.argv[2]) || 2
 
 function add (a, b) {
   return a + b
@@ -11,7 +11,6 @@ function notUsed () { // eslint-disable-line no-unused-vars
 // load another js file just for fun
 // require('./foo')
 
-const N = parseInt(process.argv[2]) || 2
 console.log('this file runs for %d seconds', N)
 console.log('every second it adds two numbers')
 
