@@ -1,0 +1,69 @@
+{
+  "name": "liverage",
+  "description": "Makes your code coverage a real time live source",
+  "version": "1.0.0",
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "bugs": "https://github.com/bahmutov/liverage/issues",
+  "config": {
+    "pre-git": {
+      "commit-msg": "simple",
+      "pre-commit": [
+        "npm run deps",
+        "npm test",
+        "npm run ban"
+      ],
+      "pre-push": [
+        "npm run secure",
+        "npm run license",
+        "npm run ban -- --all",
+        "npm run size"
+      ],
+      "post-commit": [],
+      "post-merge": []
+    }
+  },
+  "files": [
+    "index.js",
+    "src/*.js",
+    "!src/*-spec.js"
+  ],
+  "homepage": "https://github.com/bahmutov/liverage#readme",
+  "keywords": [
+    "code coverage",
+    "cover",
+    "coverage",
+    "live",
+    "real-time",
+    "realtime"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bahmutov/liverage.git"
+  },
+  "scripts": {
+    "ban": "ban",
+    "deps": "deps-ok",
+    "format": "standard-format -w index.js src/*.js",
+    "issues": "git-issues",
+    "license": "license-checker --production --onlyunknown --csv",
+    "lint": "standard --verbose index.js src/*.js",
+    "pretest": "npm run format && npm run lint",
+    "secure": "nsp check",
+    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
+    "test": "npm run unit",
+    "unit": "mocha src/*-spec.js"
+  },
+  "devDependencies": {
+    "ban-sensitive-files": "1.8.2",
+    "deps-ok": "1.1.0",
+    "git-issues": "1.2.0",
+    "license-checker": "5.1.1",
+    "mocha": "2.4.5",
+    "nsp": "2.3.2",
+    "pre-git": "3.8.3",
+    "standard": "6.0.8",
+    "standard-format": "2.1.1"
+  }
+}
