@@ -55,7 +55,7 @@
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
     "example": "nyc --cache true --reporter html node examples/basic/index.js 5",
-    "example-live": "nyc --require ./liverage.js --exclude liverage.js --reporter html node examples/basic/index.js 5"
+    "example-live": "nyc --require ./index.js --exclude index.js --reporter html node examples/basic/index.js 5"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.2",
