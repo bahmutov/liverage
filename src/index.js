@@ -10,6 +10,8 @@ const jsFiles = glob.sync('{src,examples}/**/*.js')
   .map(toFull)
 console.log('preparing for possible coverage of %d source js files', jsFiles.length)
 
+const summarizeFileCoverage = require('istanbul').utils.summarizeFileCoverage
+
 const liveStatementCoverage = require('real-time-coverage')
 // const statementCovered = (options) => {
 //   // options.filename is also available
@@ -58,11 +60,19 @@ Object.defineProperty(global, '__coverage__', {
         get: () => fileCoverage,
         set: (coverage) => {
           console.log('setting file coverage for', filename)
-          fileCoverage = liveStatementCoverage(statementCovered, filename, coverage)
+          // fileCoverage = liveStatementCoverage(statementCovered, filename, coverage)
+          const summary = summarizeFileCoverage(coverage)
+          console.log(summary)
+          fileCoverage = coverage
+
           if (server) {
             const source = read(filename, 'utf8')
             console.log('sending code for', filename, 'to clients')
             server.setSource(source, filename)
+            setImmediate(() => {
+              server.setCoverage(global.__coverage__)
+              console.log(fileCoverage)
+            })
           }
         }
       })

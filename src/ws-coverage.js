@@ -10,6 +10,10 @@ function sourceMessage (source, filename) {
   return JSON.stringify({source, filename})
 }
 
+function coverageMessage (coverage) {
+  return JSON.stringify({coverage: JSON.stringify(coverage)})
+}
+
 function statementMessage (filename, line, counter) {
   return JSON.stringify({line, filename, counter})
 }
@@ -58,6 +62,7 @@ function start () {
 
   var wss
   var _sourceMessage
+  var _coverage
 
   const api = {
     setSource: function (source, filename) {
@@ -67,6 +72,15 @@ function start () {
         wss.broadcast(_sourceMessage)
       } else {
         messages.push(_sourceMessage)
+      }
+    },
+    setCoverage: function (coverage) {
+      _coverage = coverageMessage(coverage)
+      if (wss) {
+        console.log('broadcasting new coverage to clients')
+        wss.broadcast(_coverage)
+      } else {
+        messages.push(_coverage)
       }
     },
     statementCovered: function (filename, statement, counter) {
@@ -93,7 +107,9 @@ function start () {
       if (_sourceMessage) {
         ws.send(_sourceMessage)
       }
-      // sendCoverage(sendObject)
+      if (_coverage) {
+        ws.send(_coverage)
+      }
     })
   }, (err) => {
     console.error('could not start ws server')
