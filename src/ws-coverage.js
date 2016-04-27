@@ -1,3 +1,8 @@
+'use strict'
+
+const la = require('lazy-ass')
+const is = require('check-more-types')
+
 // mock coverage information that just sends
 // random "line covered" events to every listener
 
@@ -6,16 +11,22 @@
 // const read = require('fs').readFileSync
 const WebSocketServer = require('ws').Server
 
+function stringify (o) {
+  la(arguments.length === 1, 'expected single object', arguments)
+  la(is.object(o), 'expected an object', o)
+  return JSON.stringify(o)
+}
+
 function sourceMessage (source, filename) {
-  return JSON.stringify({source, filename})
+  return stringify({source, filename})
 }
 
 function coverageMessage (coverage) {
-  return JSON.stringify({coverage: JSON.stringify(coverage)})
+  return stringify({coverage: stringify(coverage)})
 }
 
 function statementMessage (filename, line, counter) {
-  return JSON.stringify({line, filename, counter})
+  return stringify({line, filename, counter})
 }
 
 function startServer (port) {
@@ -87,6 +98,21 @@ function start () {
         wss.broadcast(s)
       }
       messages.push(s)
+    },
+    finished: function () {
+      console.log('ws server is finished')
+      setTimeout(function cleanup () {
+        _sourceMessage = null
+        _coverage = null
+        messages.length = 0
+      }, 100)
+      wss.broadcast(stringify({done: true}))
+      wss.close((err) => {
+        if (err) {
+          console.error('Error trying to close web socket server')
+          console.error(err.stack || err)
+        }
+      })
     }
   }
 

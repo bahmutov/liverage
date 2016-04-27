@@ -13,6 +13,13 @@ const jsFiles = glob.sync('{src,examples}/**/*.js')
   .map(toFull)
 console.log('preparing for possible coverage of %d source js files', jsFiles.length)
 
+process.on('exit', function () {
+  console.log('process on exit')
+  if (server) {
+    server.finished()
+  }
+})
+
 const computeLineCoverage = require('./covered-lines').compute
 const liveStatementCoverage = require('real-time-coverage')
 // const statementCovered = (options) => {

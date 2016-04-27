@@ -55,7 +55,7 @@
     "unit": "mocha src/*-spec.js",
     "example": "nyc --cache true --reporter html node examples/basic/index.js 5",
     "example-json": "nyc --cache true --reporter json node examples/basic/index.js 5",
-    "example-live": "nyc --require ./src --exclude src/index.js --reporter html node examples/basic/index.js 50",
+    "example-live": "nyc --require ./src --exclude src/index.js --reporter html node examples/basic/index.js 5",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "devDependencies": {

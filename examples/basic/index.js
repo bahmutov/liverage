@@ -23,6 +23,7 @@ const s = setInterval(function () {
   k += 1
   if (k >= N) {
     clearInterval(s)
-    process.exit(0)
+    console.log('we are done!')
+  // process.exit(0)
   }
 }, 2000)
