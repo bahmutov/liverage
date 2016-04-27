@@ -1,7 +1,7 @@
 {
   "name": "liverage",
   "description": "Makes your code coverage a real time live source",
-  "version": "1.0.0",
+  "version": "0.0.0-semantic-release",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": "https://github.com/bahmutov/liverage/issues",
   "config": {
@@ -55,7 +55,8 @@
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
     "example": "nyc --cache true --reporter html node examples/basic/index.js 5",
-    "example-live": "nyc --require ./index.js --exclude index.js --reporter html node examples/basic/index.js 5"
+    "example-live": "nyc --require ./index.js --exclude index.js --reporter html node examples/basic/index.js 5",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.2",
@@ -67,7 +68,8 @@
     "nyc": "6.4.0",
     "pre-git": "3.8.3",
     "standard": "6.0.8",
-    "standard-format": "2.1.1"
+    "standard-format": "2.1.1",
+    "semantic-release": "^4.3.5"
   },
   "dependencies": {
     "glob": "7.0.3"
