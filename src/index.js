@@ -1,8 +1,12 @@
+'use strict'
+
 console.log('real time code coverage')
 const glob = require('glob')
 const path = require('path')
-const jsFiles = glob.sync('**/*.js')
-  .map((name) => path.resolve(name))
+// TODO how to exclude node_modules right away?
+const toFull = (name) => path.resolve(name)
+const jsFiles = glob.sync(path.join(__dirname, '../**/*.js'))
+  .map(toFull)
 console.log('preparing for possible coverage of %d source js files', jsFiles.length)
 
 var cover
