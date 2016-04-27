@@ -45,15 +45,17 @@
   "scripts": {
     "ban": "ban",
     "deps": "deps-ok",
-    "format": "standard-format -w index.js src/*.js",
+    "format": "standard-format -w index.js src/*.js examples/*/*.js",
     "issues": "git-issues",
     "license": "license-checker --production --onlyunknown --csv",
-    "lint": "standard --verbose index.js src/*.js",
+    "lint": "standard --verbose index.js src/*.js examples/*/*.js",
     "pretest": "npm run format && npm run lint",
     "secure": "nsp check",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "test": "npm run unit",
-    "unit": "mocha src/*-spec.js"
+    "unit": "mocha src/*-spec.js",
+    "example": "nyc --cache true --reporter html node examples/basic/index.js 5",
+    "example-live": "nyc --require ./liverage.js --exclude liverage.js --reporter html node examples/basic/index.js 5"
   },
   "devDependencies": {
     "ban-sensitive-files": "1.8.2",
@@ -62,8 +64,12 @@
     "license-checker": "5.1.1",
     "mocha": "2.4.5",
     "nsp": "2.3.2",
+    "nyc": "6.4.0",
     "pre-git": "3.8.3",
     "standard": "6.0.8",
     "standard-format": "2.1.1"
+  },
+  "dependencies": {
+    "glob": "7.0.3"
   }
 }
