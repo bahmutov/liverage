@@ -54,7 +54,7 @@
     "test": "npm run unit",
     "unit": "mocha src/*-spec.js",
     "example": "nyc --cache true --reporter html node examples/basic/index.js 5",
-    "example-live": "nyc --require ./src --exclude src/index.js --reporter html node examples/basic/index.js 5",
+    "example-live": "nyc --require ./src --exclude src/index.js --reporter html node examples/basic/index.js 500",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "devDependencies": {
@@ -74,6 +74,7 @@
     "check-more-types": "2.20.2",
     "glob": "7.0.3",
     "lazy-ass": "1.4.0",
-    "real-time-coverage": "1.1.0"
+    "real-time-coverage": "1.1.0",
+    "ws": "1.1.0"
   }
 }
