@@ -70,26 +70,23 @@ function start () {
       if (wss) {
         console.log('broadcasting new source to clients', filename)
         wss.broadcast(_sourceMessage)
-      } else {
-        messages.push(_sourceMessage)
       }
+      messages.push(_sourceMessage)
     },
     setCoverage: function (coverage) {
       _coverage = coverageMessage(coverage)
       if (wss) {
         console.log('broadcasting new coverage to clients')
         wss.broadcast(_coverage)
-      } else {
-        messages.push(_coverage)
       }
+      messages.push(_coverage)
     },
     statementCovered: function (filename, statement, counter) {
       const s = statementMessage(filename, statement, counter)
       if (wss) {
         wss.broadcast(s)
-      } else {
-        messages.push(s)
       }
+      messages.push(s)
     }
   }
 
@@ -99,17 +96,18 @@ function start () {
       console.log('sending %d messages to clients', messages.length)
       messages.forEach(_wss.broadcast)
     }
-    messages.length = 0
+    // messages.length = 0
     wss = _wss
 
     wss.on('connection', function connection (ws) {
-      console.log('new connection!')
-      if (_sourceMessage) {
-        ws.send(_sourceMessage)
-      }
-      if (_coverage) {
-        ws.send(_coverage)
-      }
+      console.log('new connection, replaying messages')
+      messages.forEach((m) => ws.send(m))
+    // if (_sourceMessage) {
+    //   ws.send(_sourceMessage)
+    // }
+    // if (_coverage) {
+    //   ws.send(_coverage)
+    // }
     })
   }, (err) => {
     console.error('could not start ws server')

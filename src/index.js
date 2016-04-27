@@ -1,6 +1,9 @@
 'use strict'
 
 console.log('real time code coverage')
+
+const la = require('lazy-ass')
+const is = require('check-more-types')
 const glob = require('glob')
 const read = require('fs').readFileSync
 const path = require('path')
@@ -10,6 +13,7 @@ const jsFiles = glob.sync('{src,examples}/**/*.js')
   .map(toFull)
 console.log('preparing for possible coverage of %d source js files', jsFiles.length)
 
+const computeLineCoverage = require('./covered-lines').compute
 const liveStatementCoverage = require('real-time-coverage')
 // const statementCovered = (options) => {
 //   // options.filename is also available
@@ -24,8 +28,18 @@ console.log('have ws coverage server')
 
 const statementCovered = (options) => {
   // console.log('%s s %s covered %d', options.name, options.s, options.counter)
-  if (server) {
-    server.statementCovered(options.filename, Number(options.s), options.counter)
+  if (server && cover) {
+    la(is.unemptyString(options.s), 'no covered statement', options)
+    la(is.unemptyString(options.filename), 'no filename', options)
+    const fileCoverage = cover[options.filename]
+    if (fileCoverage) {
+      const statementInfo = fileCoverage.statementMap[options.s]
+      la(statementInfo, 'missing start for statement', options.s)
+      const firstLine = statementInfo.start.line
+      la(is.number(firstLine), 'not a number of line', statementInfo)
+      console.log('line', firstLine, 'counter', options.counter)
+      server.statementCovered(options.filename, firstLine, options.counter)
+    }
   }
 }
 
@@ -59,6 +73,9 @@ Object.defineProperty(global, '__coverage__', {
         set: (coverage) => {
           console.log('setting file coverage for', filename)
           fileCoverage = liveStatementCoverage(statementCovered, filename, coverage)
+          const lines = computeLineCoverage(fileCoverage)
+          la(is.object(lines), 'expected line coverage', lines)
+          fileCoverage.l = lines
           // const summary = summarizeFileCoverage(coverage)
           // console.log(summary)
 
@@ -66,10 +83,9 @@ Object.defineProperty(global, '__coverage__', {
             const source = read(filename, 'utf8')
             console.log('sending code for', filename, 'to clients')
             server.setSource(source, filename)
-            setImmediate(() => {
-              server.setCoverage(global.__coverage__)
-              console.log(fileCoverage)
-            })
+            // for now just for a particular filename
+            console.log('with line coverage', fileCoverage.l)
+            server.setCoverage(fileCoverage)
           }
         }
       })
