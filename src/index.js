@@ -5,9 +5,14 @@ const glob = require('glob')
 const path = require('path')
 // TODO how to exclude node_modules right away?
 const toFull = (name) => path.resolve(name)
-const jsFiles = glob.sync(path.join(__dirname, '../**/*.js'))
+const jsFiles = glob.sync('{src,examples}/**/*.js')
   .map(toFull)
 console.log('preparing for possible coverage of %d source js files', jsFiles.length)
+
+const liveStatementCoverage = require('real-time-coverage')
+const statementCovered = (options) => {
+  console.log('%s s %s covered %d', options.name, options.s, options.counter)
+}
 
 var cover
 
@@ -39,8 +44,8 @@ Object.defineProperty(global, '__coverage__', {
         enumerable: true,
         get: () => fileCoverage,
         set: (coverage) => {
-          console.log('set file coverage for', filename)
-          fileCoverage = coverage
+          console.log('setting file coverage for', filename)
+          fileCoverage = liveStatementCoverage(statementCovered, filename, coverage)
         }
       })
     })
