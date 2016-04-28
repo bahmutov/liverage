@@ -2,6 +2,7 @@
 
 const la = require('lazy-ass')
 const is = require('check-more-types')
+const pluralize = require('pluralize')
 
 // mock coverage information that just sends
 // random "line covered" events to every listener
@@ -34,7 +35,13 @@ function startServer (port) {
 
   return new Promise(function (resolve, reject) {
     const wss = new WebSocketServer({ port: port })
+
+    // allow the Node process exit without waiting for this server
+    // or any existing client connection to close
     wss._server.unref()
+    wss.on('connection', function (client) {
+      client._socket.unref()
+    })
 
     // function sendCoverage (send) {
     //   const filename = join(__dirname, './coverage.json')
@@ -52,7 +59,7 @@ function startServer (port) {
     // }
 
     wss.broadcast = function broadcast (data) {
-      console.log('sending message to %d clients', wss.clients.length)
+      console.log('sending message to', pluralize('client', wss.clients.length, true))
       wss.clients.forEach(function each (client) {
         client.send(data)
       })
@@ -102,17 +109,18 @@ function start () {
     },
     finished: function () {
       console.log('ws server is finished')
-      setTimeout(function cleanup () {
-        _sourceMessage = null
-        _coverage = null
-        messages.length = 0
-      }, 100)
+      // setTimeout(function cleanup () {
+      _sourceMessage = null
+      _coverage = null
+      messages.length = 0
+      // }, 100)
       wss.broadcast(stringify({done: true}))
       wss.close((err) => {
         if (err) {
           console.error('Error trying to close web socket server')
           console.error(err.stack || err)
         }
+        console.log('closed the web socket server')
       })
     }
   }
@@ -120,7 +128,10 @@ function start () {
   startServer().then((_wss) => {
     if (messages.length) {
       // is this synchronous?
-      console.log('sending %d messages to clients', messages.length)
+      console.log('sending %s to %s',
+        pluralize('message', messages.length, true),
+        pluralize('client', _wss.clients.length, true)
+      )
       messages.forEach(_wss.broadcast)
     }
     // messages.length = 0

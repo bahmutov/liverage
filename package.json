@@ -77,6 +77,7 @@
     "glob": "7.0.3",
     "istanbul": "0.4.3",
     "lazy-ass": "1.4.0",
+    "pluralize": "1.2.1",
     "real-time-coverage": "1.1.0",
     "ws": "1.1.0"
   }
