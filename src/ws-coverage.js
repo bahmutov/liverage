@@ -34,6 +34,7 @@ function startServer (port) {
 
   return new Promise(function (resolve, reject) {
     const wss = new WebSocketServer({ port: port })
+    wss._server.unref()
 
     // function sendCoverage (send) {
     //   const filename = join(__dirname, './coverage.json')
