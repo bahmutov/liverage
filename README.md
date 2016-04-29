@@ -37,6 +37,11 @@ Run `npm test` and the process becomes a WebSocket server
 You can observe the live code coverage using any WebSocket client, for example a CycleJs one from
 [real-time-coverage](https://github.com/bahmutov/real-time-coverage) repo.
 
+## Roadmap
+
+Currently `liverage` collects and sends the messages for the last covered file, thus if the server
+program is composed of multiple source files, the client will not be able to see them.
+
 ### Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2016
