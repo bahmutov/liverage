@@ -8,15 +8,40 @@
 [![semantic-release][semantic-image] ][semantic-url]
 [![js-standard-style][standard-image]][standard-url]
 
+## Install and use
+
+Assuming that you use a Node code coverage tool like [nyc](https://www.npmjs.com/package/nyc)
+to instrument your code
+
+```sh
+npm install --save-dev liverage nyc
+```
+
+Then load `liverage` when running `nyc` using script command in `package.json`
+
+```json
+{
+    "scripts": {
+        "test": "nyc --require liverage node index.js"
+    }
+}
+```
+
+Run `npm test` and the process becomes a WebSocket server 
+(via [ws](https://www.npmjs.com/package/ws)) on default port 3032. 
+
+## Client
+
+You can observe the live code coverage using any WebSocket client, for example a CycleJs one from
+[real-time-coverage](https://github.com/bahmutov/real-time-coverage) repo.
+
 ### Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2016
 
-
 * [@bahmutov](https://twitter.com/bahmutov)
 * [glebbahmutov.com](http://glebbahmutov.com)
 * [blog](http://glebbahmutov.com/blog)
-
 
 License: MIT - do anything with the code, but don't blame me if it does not work.
 

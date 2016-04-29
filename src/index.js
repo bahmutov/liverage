@@ -7,10 +7,16 @@ const is = require('check-more-types')
 const glob = require('glob')
 const read = require('fs').readFileSync
 const path = require('path')
-// TODO how to exclude node_modules right away?
-const toFull = (name) => path.resolve(name)
-const jsFiles = glob.sync('{src,examples}/**/*.js')
-  .map(toFull)
+
+function findSourceFiles () {
+  // TODO how grab everything BUT node_modules folder?
+  const toFull = (name) => path.resolve(name)
+  return glob.sync('{src,examples}/**/*.js')
+    .concat(glob.sync('*.js'))
+    .map(toFull)
+}
+
+const jsFiles = findSourceFiles()
 console.log('preparing for possible coverage of %d source js files', jsFiles.length)
 
 process.on('exit', function () {
