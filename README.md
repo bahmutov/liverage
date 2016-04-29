@@ -30,7 +30,8 @@ Then load `liverage` when running `nyc` using script command in `package.json`
 ```
 
 Run `npm test` and the process becomes a WebSocket server 
-(via [ws](https://www.npmjs.com/package/ws)) on default port 3032. 
+(via [ws](https://www.npmjs.com/package/ws)) on default port 3032 
+(use variable PORT to control this). 
 
 There is a simple example included with this repository you can observe if you clone it
 
@@ -44,7 +45,7 @@ npm run example-live
 ## Client
 
 You can observe the live code coverage using any WebSocket client, for example a CycleJs one from
-[real-time-coverage](https://github.com/bahmutov/real-time-coverage) repo. Details are coming.
+[liverage-client](https://github.com/bahmutov/liverage-client) repo.
 
 ## Roadmap
 
