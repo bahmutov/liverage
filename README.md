@@ -8,6 +8,8 @@
 [![semantic-release][semantic-image] ][semantic-url]
 [![js-standard-style][standard-image]][standard-url]
 
+![liverage demo](images/liverage.gif)
+
 ## Install and use
 
 Assuming that you use a Node code coverage tool like [nyc](https://www.npmjs.com/package/nyc)
