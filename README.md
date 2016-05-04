@@ -52,6 +52,11 @@ You can observe the live code coverage using any WebSocket client, for example a
 Currently `liverage` collects and sends the messages for the last covered file, thus if the server
 program is composed of multiple source files, the client will not be able to see them.
 
+## Details
+
+I have described the principle that allows `liverage` to work in 
+[Turning code coverage into live stream](https://glebbahmutov.com/blog/turning-code-coverage-into-live-stream/) blog post.
+
 ### Small print
 
 Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2016
